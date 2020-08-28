@@ -12,6 +12,8 @@ import ValidationComponent from '../components/ValidationComponent/ValidationCom
 import Cockpit from '../components/Cockpit/Cockpit';
 import Aux from '../hoc/Auxiliary';
 import withClass from '../hoc/withClass';
+import AuthContext from '../context/auth-context.js';
+
 /* const StyledButton = styled.button`
   background-color: ${(props) => (props.alt ? 'red' : 'green')};
   color: white;
@@ -165,15 +167,22 @@ class App extends Component {
         >
           Remove Cockpit
         </button>
-        {this.state.showCockpit ? (
-          <Cockpit
-            showPersons={this.state.showPersons}
-            personsLength={this.state.persons.length}
-            clicked={this.togglePersonsHandler}
-            login={this.loginHandler}
-          />
-        ) : null}
-        {persons}
+        <AuthContext.Provider
+          value={{
+            authenticated: this.state.authenticated,
+            login: this.loginHandler,
+          }}
+        >
+          {this.state.showCockpit ? (
+            <Cockpit
+              showPersons={this.state.showPersons}
+              personsLength={this.state.persons.length}
+              clicked={this.togglePersonsHandler}
+              login={this.loginHandler}
+            />
+          ) : null}
+          {persons}
+        </AuthContext.Provider>
         {usernameIO}
         {textIO}
         <ValidationComponent
